@@ -1,10 +1,8 @@
 mod days;
 mod etc;
 
+use days::{day01, day02, day03, day04, day05, day06, day07, day08, day09, day10, day11, day12};
 use etc::solution::Solution;
-use days::{day01, day02, day03, day04, day05,
-           day06, day07, day08, day09, day10,
-           day11, day12};
 use std::env;
 use std::time::Instant;
 
@@ -16,8 +14,12 @@ fn main() {
         panic!("Please provide the day(s) to run as a command-line argument.");
     }
 
-    let days: Vec<u8> = args[1..].iter()
-        .map(|x| x.parse().unwrap_or_else(|v| panic!("Not a valid day: {}", v)))
+    let days: Vec<u8> = args[1..]
+        .iter()
+        .map(|x| {
+            x.parse()
+                .unwrap_or_else(|v| panic!("Not a valid day: {}", v))
+        })
         .collect();
 
     let mut runtime = 0.0;
@@ -28,7 +30,7 @@ fn main() {
         let time = Instant::now();
         let (p1, p2) = func();
         let elapsed_ms = time.elapsed().as_nanos() as f64 / 1_000_000.0;
-        
+
         println!("\n=== Day {:02} ===", day);
         println!("  · Part 1: {}", p1);
         println!("  · Part 2: {}", p2);
@@ -42,18 +44,18 @@ fn main() {
 
 fn get_day_solver(day: u8) -> fn() -> SolutionPair {
     match day {
-         1 => day01::solve,
-         2 => day02::solve,
-         3 => day03::solve,
-         4 => day04::solve,
-         5 => day05::solve,
-         6 => day06::solve,
-         7 => day07::solve,
-         8 => day08::solve,
-         9 => day09::solve,
+        1 => day01::solve,
+        2 => day02::solve,
+        3 => day03::solve,
+        4 => day04::solve,
+        5 => day05::solve,
+        6 => day06::solve,
+        7 => day07::solve,
+        8 => day08::solve,
+        9 => day09::solve,
         10 => day10::solve,
         11 => day11::solve,
         12 => day12::solve,
-         _ => unimplemented!(),
+        _ => unimplemented!(),
     }
 }

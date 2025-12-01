@@ -1,3 +1,4 @@
+#![allow(unused)]
 pub mod consts;
 pub mod grid;
 pub mod point;

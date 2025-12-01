@@ -1,5 +1,6 @@
-use std::iter::Enumerate;
+#![allow(unused)]
 use std::fmt::Display;
+use std::iter::Enumerate;
 use std::ops::{Index, IndexMut};
 use std::slice::Iter;
 
@@ -17,19 +18,31 @@ pub struct Grid<T> {
 
 pub struct GridEnumerate<'a, T> {
     iter: Enumerate<Iter<'a, T>>,
-    mat: &'a Grid<T>
+    mat: &'a Grid<T>,
 }
 
 impl<T> Grid<T> {
     pub fn from_data(width: usize, height: usize, data: Vec<T>) -> Self {
         assert_eq!(data.len(), width * height);
-        Self { width, height, data }
+        Self {
+            width,
+            height,
+            data,
+        }
     }
 
     pub fn map_from_str(string: &str, mapper: fn(char) -> T) -> Self {
         let width = string.lines().next().unwrap().len();
-        let data: Vec<_> = string.chars().filter(|ch| !ch.is_whitespace()).map(mapper).collect();
-        Self{ width, height: data.len() / width, data }
+        let data: Vec<_> = string
+            .chars()
+            .filter(|ch| !ch.is_whitespace())
+            .map(mapper)
+            .collect();
+        Self {
+            width,
+            height: data.len() / width,
+            data,
+        }
     }
 
     pub fn width(&self) -> usize {
@@ -60,14 +73,25 @@ impl<T> Grid<T> {
     }
 
     pub fn enumerate(&self) -> GridEnumerate<T> {
-        GridEnumerate { mat: self, iter: self.data.iter().enumerate() }
+        GridEnumerate {
+            mat: self,
+            iter: self.data.iter().enumerate(),
+        }
     }
 
     //////////////////////////////////////////////////////////////////////////
 
     fn index(&self, x: usize, y: usize) -> usize {
-        assert!(x < self.width(), "x index out of bounds: {x} but width is {}", self.width());
-        assert!(y < self.height(), "y index out of bounds: {y} but height is {}", self.height());
+        assert!(
+            x < self.width(),
+            "x index out of bounds: {x} but width is {}",
+            self.width()
+        );
+        assert!(
+            y < self.height(),
+            "y index out of bounds: {y} but height is {}",
+            self.height()
+        );
         y * self.width + x
     }
 
@@ -79,7 +103,11 @@ impl<T> Grid<T> {
 impl<T: Copy> Grid<T> {
     pub fn new(width: usize, height: usize, default: T) -> Self {
         let data = vec![default; width * height];
-        Self { width, height, data }
+        Self {
+            width,
+            height,
+            data,
+        }
     }
 
     pub fn get_or(&self, pos: Point, default: T) -> T {
@@ -122,8 +150,10 @@ impl<T, I: PrimInt + Display> Index<(I, I)> for Grid<T> {
 
     fn index(&self, (x, y): (I, I)) -> &Self::Output {
         let i = self.index(
-            x.to_usize().unwrap_or_else(|| panic!("X index not valid: {x}")),
-            y.to_usize().unwrap_or_else(|| panic!("Y index not valid: {y}"))
+            x.to_usize()
+                .unwrap_or_else(|| panic!("X index not valid: {x}")),
+            y.to_usize()
+                .unwrap_or_else(|| panic!("Y index not valid: {y}")),
         );
         &self.data[i]
     }
@@ -132,8 +162,10 @@ impl<T, I: PrimInt + Display> Index<(I, I)> for Grid<T> {
 impl<T, I: PrimInt + Display> IndexMut<(I, I)> for Grid<T> {
     fn index_mut(&mut self, (x, y): (I, I)) -> &mut Self::Output {
         let i = self.index(
-            x.to_usize().unwrap_or_else(|| panic!("X index not valid: {x}")),
-            y.to_usize().unwrap_or_else(|| panic!("Y index not valid: {y}"))
+            x.to_usize()
+                .unwrap_or_else(|| panic!("X index not valid: {x}")),
+            y.to_usize()
+                .unwrap_or_else(|| panic!("Y index not valid: {y}")),
         );
         &mut self.data[i]
     }

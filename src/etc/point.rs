@@ -1,6 +1,6 @@
-use std::fmt::Display;
-use std::ops::{Add, AddAssign, Sub, SubAssign, Mul, MulAssign, Neg};
 use num_traits::PrimInt;
+use std::fmt::Display;
+use std::ops::{Add, AddAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 /** A point in a 2D space. It can also be used to index `Grid`. */
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Default)]
@@ -63,8 +63,16 @@ impl Point {
     }
 
     pub fn neighbors_diag(&self) -> [Self; 8] {
-        [self.up(), self.down(), self.left(), self.right(),
-         self.up().left(), self.up().right(), self.down().left(), self.down().right()]
+        [
+            self.up(),
+            self.down(),
+            self.left(),
+            self.right(),
+            self.up().left(),
+            self.up().right(),
+            self.down().left(),
+            self.down().right(),
+        ]
     }
 }
 
@@ -72,8 +80,12 @@ impl Point {
 
 impl<I: PrimInt + Display> From<(I, I)> for Point {
     fn from((x, y): (I, I)) -> Self {
-        let x = x.to_i32().unwrap_or_else(|| panic!("x value too large: {x}"));
-        let y = y.to_i32().unwrap_or_else(|| panic!("y value too large: {y}"));
+        let x = x
+            .to_i32()
+            .unwrap_or_else(|| panic!("x value too large: {x}"));
+        let y = y
+            .to_i32()
+            .unwrap_or_else(|| panic!("y value too large: {y}"));
         Self::new(x, y)
     }
 }
