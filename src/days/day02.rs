@@ -1,5 +1,6 @@
 use crate::{Solution, SolutionPair};
 use std::fs::read_to_string;
+use rayon::prelude::*;
 ///////////////////////////////////////////////////////////////////////////////
 
 pub fn solve() -> SolutionPair {
@@ -27,20 +28,29 @@ fn parse_input(input: &str) -> Vec<Range> {
         })
         .collect()
 }
-fn sum_repeated_numbers(ranges: &Vec<Range>, exact_times: Option<u64>) -> u64 {
-    let mut total: u64 = 0;
-    for range in ranges {
-        for n in range.start..=range.end {
-            let s = n.to_string();
-            if is_reapted(&s, exact_times) {
-                total += n;
-            }
-        }
-    }
-    total
+
+fn sum_repeated_numbers(ranges: &[Range], exact_times: Option<u64>) -> u64 {
+    ranges
+        .par_iter()
+        .map(|range| {
+            (range.start..=range.end)
+                .into_par_iter()
+                .map(|n| {
+                    let s = n.to_string();
+                    if is_repeated(&s, exact_times) {
+                        n as u64
+                    } else {
+                        0
+                    }
+                })
+                .sum::<u64>()
+        })
+        .sum()
 }
 
-fn is_reapted(s: &str, exact_times: Option<u64>) -> bool {
+
+
+fn is_repeated(s: &str, exact_times: Option<u64>) -> bool {
     let max_str_len = s.len() / 2;
     for n in 1..=max_str_len {
         let subset = &s[..n];
@@ -65,12 +75,12 @@ mod tests {
 
     #[test]
     fn test_is_repeated() {
-        assert!(is_reapted("11", Some(2)));
-        assert!(is_reapted("1188511885", Some(2)));
-        assert!(is_reapted("222222", Some(2)));
-        assert!(is_reapted("abcabc", Some(2)));
-        assert!(!is_reapted("1188511890", Some(2)));
-        assert!(is_reapted("111", None));
+        assert!(is_repeated("11", Some(2)));
+        assert!(is_repeated("1188511885", Some(2)));
+        assert!(is_repeated("222222", Some(2)));
+        assert!(is_repeated("abcabc", Some(2)));
+        assert!(!is_repeated("1188511890", Some(2)));
+        assert!(is_repeated("111", None));
     }
     #[test]
     fn test_sum_repeated_numbers() {
