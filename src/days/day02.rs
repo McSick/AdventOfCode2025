@@ -1,6 +1,6 @@
 use crate::{Solution, SolutionPair};
-use std::fs::read_to_string;
 use rayon::prelude::*;
+use std::fs::read_to_string;
 ///////////////////////////////////////////////////////////////////////////////
 
 pub fn solve() -> SolutionPair {
@@ -47,8 +47,6 @@ fn sum_repeated_numbers(ranges: &[Range], exact_times: Option<u64>) -> u64 {
         })
         .sum()
 }
-
-
 
 fn is_repeated(s: &str, exact_times: Option<u64>) -> bool {
     let max_str_len = s.len() / 2;
