@@ -53,6 +53,11 @@ impl<T> Grid<T> {
         self.height
     }
 
+    pub fn set(&mut self, pos: Point, value: T) {
+        let index = self.index(pos.x as usize, pos.y as usize);
+        self.data[index] = value;
+    }
+
     pub fn get(&self, pos: Point) -> Option<&T> {
         if self.is_in_bounds(pos) {
             Some(&self[pos])
