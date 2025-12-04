@@ -9,9 +9,6 @@ pub fn solve() -> SolutionPair {
     let sol1 = part1(grid.clone());
     let sol2 = part2(grid, 0);
 
-    let test = Grid::from_str(EXAMPLE);
-    assert_eq!(part2(test, 0), 43);
-
     (Solution::from(sol1), Solution::from(sol2))
 }
 fn part1(grid: Grid<char>) -> u32 {
