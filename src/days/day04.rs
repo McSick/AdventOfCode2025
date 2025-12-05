@@ -57,7 +57,12 @@ fn part2(mut grid: Grid<char>, mut removed: u32) -> u32 {
     }
     part2(grid, removed)
 }
-const EXAMPLE: &str = "..@@.@@@@.
+
+//test
+#[cfg(test)]
+mod tests {
+    use super::*;
+    const EXAMPLE: &str = "..@@.@@@@.
 @@@.@.@.@@
 @@@@@.@.@@
 @.@@@@..@.
@@ -67,11 +72,6 @@ const EXAMPLE: &str = "..@@.@@@@.
 @.@@@.@@@@
 .@@@@@@@@.
 @.@.@@@.@.";
-
-//test
-#[cfg(test)]
-mod tests {
-    use super::*;   
     #[test]
     fn test_example() {
         let test = Grid::from_str(EXAMPLE);

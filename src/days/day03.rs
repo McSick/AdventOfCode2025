@@ -12,7 +12,9 @@ pub fn solve() -> SolutionPair {
 }
 fn part1(input: &str) -> u64 {
     input
-        .lines().collect::<Vec<&str>>().par_iter()
+        .lines()
+        .collect::<Vec<&str>>()
+        .par_iter()
         .map(|line| {
             let batteries = parse_line_into_batteries(line);
             find_biggest_joltage(&batteries, 2)
@@ -22,7 +24,9 @@ fn part1(input: &str) -> u64 {
 
 fn part2(input: &str) -> u64 {
     input
-        .lines().collect::<Vec<&str>>().par_iter()
+        .lines()
+        .collect::<Vec<&str>>()
+        .par_iter()
         .map(|line| {
             let batteries = parse_line_into_batteries(line);
             find_biggest_joltage(&batteries, 12)
